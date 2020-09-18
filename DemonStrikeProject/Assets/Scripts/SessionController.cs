@@ -5,9 +5,15 @@ using UnityEngine;
 
 public class SessionController : MonoBehaviour
 {
-    public BallController character;
+    public BallController[] characters;
+
+    private int currentUnitIndex = 0;
 
     private float holdDownStartTime;
+
+	private void Start() {
+        characters[currentUnitIndex].CanMove(true);
+	}
 
 	void Update() {
         if (Input.GetMouseButtonDown(0)) {
@@ -21,9 +27,22 @@ public class SessionController : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0)) {
             float holdDownTime = Time.time - holdDownStartTime;
-            character.Launch(CalculateHoldDownForce(holdDownTime));
+            characters[currentUnitIndex].Launch(CalculateHoldDownForce(holdDownTime));
         }
+
+        if (characters[currentUnitIndex].TurnEnded()) {
+            NextUnit();
+		}
     }
+
+    void NextUnit() {
+        currentUnitIndex += 1;
+        if (currentUnitIndex >= characters.Length) {
+            currentUnitIndex = 0;
+		}
+
+        characters[currentUnitIndex].CanMove(true);
+	}
 
 	private float CalculateHoldDownForce(float holdTime) {
         float maxForceHoldDownTime = 2f;
