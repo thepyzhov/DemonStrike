@@ -9,8 +9,6 @@ public class BallController : MonoBehaviour
 	public const float MaxForce = 1000f;
 	public float movementTime = 2f;
 
-	private State state = State.STAND;
-
 	private Rigidbody2D rb;
 
 	private void Start() {
