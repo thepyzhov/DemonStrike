@@ -284,6 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   power: 10
+  maxLength: 10
   minPower: {x: 0, y: 0}
   maxPower: {x: 0, y: 0}
 --- !u!1 &275231138
@@ -2349,6 +2350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   power: 10
+  maxLength: 3
   minPower: {x: -3, y: -3}
   maxPower: {x: 3, y: 3}
 --- !u!1 &828541246
@@ -2367,7 +2369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &828541247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2381,8 +2383,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characters:
-  - {fileID: 735110891}
-  - {fileID: 164059130}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &828541248
 Transform:
   m_ObjectHideFlags: 0

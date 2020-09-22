@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class BallAttack : MonoBehaviour {
 	public float power = 10f;
-
-	public Vector2 minPower;
-	public Vector2 maxPower;
+	public float maxLength = 3f;
 
 	private Rigidbody2D rb;
 	private Camera cam;
@@ -23,26 +21,26 @@ public class BallAttack : MonoBehaviour {
 
 	private void Update() {
 		if (Input.GetMouseButtonDown(0)) {
-			//startPoint = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
 			startPoint = Vector3.zero;
 			startPoint.z = 0;
 		}
 
 		if (Input.GetMouseButton(0)) {
 			Vector3 currentPoint = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-			currentPoint *= -1;
 			currentPoint.z = 0;
+			Vector3 clampedCurrentPoint = Vector3.ClampMagnitude(currentPoint, maxLength) * -1;
 
-			tl.RenderLine(startPoint, currentPoint);
+			tl.RenderLine(startPoint, clampedCurrentPoint);
 		}
 
 		if (Input.GetMouseButtonUp(0)) {
-			endPoint = cam.ScreenToWorldPoint(Input.mousePosition) * -1;
+			endPoint = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
 			endPoint.z = 0;
+			Vector3 clampedEndPoint = Vector3.ClampMagnitude(endPoint, maxLength) * -1;
 
-			force = new Vector2(Mathf.Clamp(endPoint.x - startPoint.x, minPower.x, maxPower.x),
-								Mathf.Clamp(endPoint.y - startPoint.y, minPower.y, maxPower.y));
-			rb.AddForce(force, ForceMode2D.Impulse);
+			force = new Vector2(clampedEndPoint.x, clampedEndPoint.y);
+			rb.AddForce(force * power, ForceMode2D.Impulse);
+			Debug.Log(rb.velocity.magnitude);
 
 			tl.EndLine();
 		}
