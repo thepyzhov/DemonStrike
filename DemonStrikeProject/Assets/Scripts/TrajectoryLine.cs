@@ -7,6 +7,7 @@ public class TrajectoryLine : MonoBehaviour {
 
 	private void Awake() {
 		lr = GetComponent<LineRenderer>();
+		lr.sortingOrder = 15;
 	}
 
 	public void RenderLine(Vector3 startPoint, Vector3 endPoint) {

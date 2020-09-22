@@ -23,26 +23,26 @@ public class BallAttack : MonoBehaviour {
 
 	private void Update() {
 		if (Input.GetMouseButtonDown(0)) {
-			startPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-			startPoint.z = 10;
-
-			endPoint = transform.position;
-			endPoint.z = 10;
+			//startPoint = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+			startPoint = Vector3.zero;
+			startPoint.z = 0;
 		}
 
 		if (Input.GetMouseButton(0)) {
-			Vector3 currentPoint = cam.ScreenToWorldPoint(Input.mousePosition) * -1;
-			currentPoint.z = 10;
+			Vector3 currentPoint = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+			currentPoint *= -1;
+			currentPoint.z = 0;
 
-			tl.RenderLine(currentPoint, endPoint);
+			tl.RenderLine(startPoint, currentPoint);
 		}
 
 		if (Input.GetMouseButtonUp(0)) {
-			startPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-			startPoint.z = 10;
+			endPoint = cam.ScreenToWorldPoint(Input.mousePosition) * -1;
+			endPoint.z = 0;
 
-			force = new Vector2(Mathf.Clamp(startPoint.x - endPoint.x, minPower.x, maxPower.x),
-								Mathf.Clamp(startPoint.y - endPoint.y, minPower.y, maxPower.y));
+			force = new Vector2(Mathf.Clamp(endPoint.x - startPoint.x, minPower.x, maxPower.x),
+								Mathf.Clamp(endPoint.y - startPoint.y, minPower.y, maxPower.y));
+			rb.AddForce(force, ForceMode2D.Impulse);
 
 			tl.EndLine();
 		}
