@@ -5,6 +5,7 @@ using UnityEngine;
 public class BallAttack : MonoBehaviour {
 	public float power = 10f;
 	public float maxLength = 3f;
+	public float movementTime = 3f;
 
 	private Rigidbody2D rb;
 	private Camera cam;
@@ -13,18 +14,20 @@ public class BallAttack : MonoBehaviour {
 	private Vector3 endPoint;
 	private TrajectoryLine tl;
 
-	//private GradientColorKey[] colorKey;
-	//private GradientAlphaKey[] alphaKey;
+	private TurnBasedSystem tbs;
 
 	private void Start() {
 		rb = GetComponent<Rigidbody2D>();
 		cam = Camera.main;
 		tl = GetComponent<TrajectoryLine>();
-
-		SetUpGradient();
+		tbs = FindObjectOfType<TurnBasedSystem>();
 	}
 
 	private void Update() {
+		if (!CanMove()) {
+			return;
+		}
+
 		if (Input.GetMouseButtonDown(0)) {
 			startPoint = Vector3.zero;
 			startPoint.z = 0;
@@ -36,7 +39,6 @@ public class BallAttack : MonoBehaviour {
 			Vector3 clampedCurrentPoint = Vector3.ClampMagnitude(currentPoint, maxLength) * -1;
 
 			tl.UpdateTrajectoryColor(clampedCurrentPoint.magnitude, maxLength);
-
 			tl.RenderLine(startPoint, clampedCurrentPoint);
 		}
 
@@ -49,27 +51,22 @@ public class BallAttack : MonoBehaviour {
 			rb.AddForce(force * power, ForceMode2D.Impulse);
 
 			tl.EndLine();
+			StartCoroutine(EndMovement());
 		}
 	}
 
-	private void SetUpGradient() {
-		//trajectoryGradient = new Gradient();
+	private IEnumerator EndMovement() {
+		yield return new WaitForSeconds(movementTime);
+		tbs.EndTurn();
+	}
 
-		//// Populate the color keys at the relative time 0 and 1 (0 and 100%)
-		//colorKey = new GradientColorKey[2];
-		//colorKey[0].color = Color.red;
-		//colorKey[0].time = 0.0f;
-		//colorKey[1].color = Color.blue;
-		//colorKey[1].time = 1.0f;
+	public void SetIsKinematicTo(bool isKinematic) {
+		rb.isKinematic = isKinematic;
+		rb.velocity = Vector2.zero;
+	}
 
-		//// Populate the alpha  keys at relative time 0 and 1  (0 and 100%)
-		//alphaKey = new GradientAlphaKey[2];
-		//alphaKey[0].alpha = 1.0f;
-		//alphaKey[0].time = 0.0f;
-		//alphaKey[1].alpha = 0.0f;
-		//alphaKey[1].time = 1.0f;
-
-		//gradient.SetKeys(colorKey, alphaKey);
+	public bool CanMove() {
+		return !rb.isKinematic;
 	}
 }
  
