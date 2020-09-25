@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BallCharacter : MonoBehaviour {
 	public string characterName;
@@ -9,6 +10,9 @@ public class BallCharacter : MonoBehaviour {
 
 	private int currentHealth;
 	private TurnBasedSystem tbs;
+
+	[Header("Unity Stuff")]
+	public Image healthBar;
 
 	private void Awake() {
 		currentHealth = maxHealth;
@@ -19,9 +23,9 @@ public class BallCharacter : MonoBehaviour {
 	}
 
 	public void TakeDamage(int damage) {
-		currentHealth -= damage;
+		currentHealth = (currentHealth - damage) <= 0 ? 0 : (currentHealth - damage);
+		healthBar.fillAmount = (float)currentHealth / (float)maxHealth;
 		if (currentHealth <= 0) {
-			currentHealth = 0;
 			Die();
 		}
 	}
