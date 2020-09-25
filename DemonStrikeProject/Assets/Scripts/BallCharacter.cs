@@ -15,7 +15,10 @@ public class BallCharacter : MonoBehaviour {
 	public Image healthBar;
 	public DamageIcon damageIcon;
 
+	private AudioManager audioManager;
+
 	private void Awake() {
+		audioManager = FindObjectOfType<AudioManager>();
 		currentHealth = maxHealth;
 	}
 
@@ -37,6 +40,12 @@ public class BallCharacter : MonoBehaviour {
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
+
+		if (collision.gameObject.CompareTag("Wall")) {
+			audioManager.Play("WallSlash");
+			return;
+		}
+
 		// When objects have the same tags
 		if (collision.gameObject.CompareTag(tag)) {
 			return;
@@ -49,6 +58,7 @@ public class BallCharacter : MonoBehaviour {
 		BallCharacter character = collision.gameObject.GetComponent<BallCharacter>();
 
 		if (character != null) {
+			audioManager.Play("Slash");
 			Vector3 contactPoint = new Vector3(collision.GetContact(0).point.x, collision.GetContact(0).point.y, 0f);
 			DamageIcon icon = Instantiate(damageIcon, contactPoint, Quaternion.identity);
 			icon.SetDamageText(damage);
