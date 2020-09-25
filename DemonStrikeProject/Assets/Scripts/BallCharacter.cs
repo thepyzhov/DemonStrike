@@ -13,6 +13,7 @@ public class BallCharacter : MonoBehaviour {
 
 	[Header("Unity Stuff")]
 	public Image healthBar;
+	public DamageIcon damageIcon;
 
 	private void Awake() {
 		currentHealth = maxHealth;
@@ -48,6 +49,9 @@ public class BallCharacter : MonoBehaviour {
 		BallCharacter character = collision.gameObject.GetComponent<BallCharacter>();
 
 		if (character != null) {
+			Vector3 contactPoint = new Vector3(collision.GetContact(0).point.x, collision.GetContact(0).point.y, 0f);
+			DamageIcon icon = Instantiate(damageIcon, contactPoint, Quaternion.identity);
+			icon.SetDamageText(damage);
 			//collision.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
 			character.TakeDamage(damage);
 		}

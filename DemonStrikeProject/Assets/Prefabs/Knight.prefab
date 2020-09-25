@@ -375,6 +375,8 @@ MonoBehaviour:
   maxHealth: 20
   damage: 10
   healthBar: {fileID: 4492336838134631005}
+  damageIcon: {fileID: 3496504593751193593, guid: 4f327264d5f744361bcfa32dbfcaed09,
+    type: 3}
 --- !u!1 &4492336840048723214
 GameObject:
   m_ObjectHideFlags: 0
