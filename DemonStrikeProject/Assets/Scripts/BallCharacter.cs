@@ -32,6 +32,11 @@ public class BallCharacter : MonoBehaviour {
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
+		// When objects have the same tags
+		if (collision.gameObject.CompareTag(tag)) {
+			return;
+		}
+
 		if (!GetComponent<BallAttack>().CanMove()) {
 			return;
 		}

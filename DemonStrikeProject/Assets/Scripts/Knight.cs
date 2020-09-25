@@ -30,6 +30,8 @@ public class Knight : MonoBehaviour
 			return;
 		}
 
-		collision.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
+		if (CompareTag("Player") && collision.gameObject.CompareTag("Enemy") || CompareTag("Enemy") && collision.gameObject.CompareTag("Player")) {
+			collision.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
+		}
 	}
 }
